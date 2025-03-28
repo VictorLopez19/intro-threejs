@@ -17,43 +17,39 @@ const geometry = new THREE.BoxGeometry(size, size, size);
 const material = new THREE.MeshBasicMaterial({ color: 0x47fee5, wireframe: false });
 const cube = new THREE.Mesh(geometry, material);
 
-// Crear las líneas del cubo
-const edges = new THREE.EdgesGeometry(geometry);
-const lineMaterial = new THREE.LineBasicMaterial({ color: 0x000000});
-
-// Crear un grupo de líneas para incluir tanto el cubo como las líneas
+// Crear un grupo para incluir tanto el cubo como las líneas
 const group = new THREE.Group();
 
 // Añadir el cubo al grupo
 group.add(cube);
 
-// Añadir las líneas del cubo al grupo
-const wireframe = new THREE.LineSegments(edges, lineMaterial);
-group.add(wireframe);
-
-// Crear las líneas adicionales en las 3 direcciones
+// Crear las "líneas" gruesas usando cubos pequeños
 const step = size / divisions;
+const lineThickness = 0.027; // Grosor de las líneas simuladas con cubos
 for (let i = -size / 2; i <= size / 2; i += step) {
 
     // Líneas paralelas al eje X
     for (let j = -size / 2; j <= size / 2; j += step) {
-        const points1 = [new THREE.Vector3(-size / 2, i, j), new THREE.Vector3(size / 2, i, j)];
-        const geo1 = new THREE.BufferGeometry().setFromPoints(points1);
-        group.add(new THREE.Line(geo1, lineMaterial));
+        const geo1 = new THREE.BoxGeometry(size, lineThickness, lineThickness);
+        const line1 = new THREE.Mesh(geo1, new THREE.MeshBasicMaterial({ color: 0x000000 }));
+        line1.position.set(0, i, j);
+        group.add(line1);
     }
 
     // Líneas paralelas al eje Y
     for (let j = -size / 2; j <= size / 2; j += step) {
-        const points2 = [new THREE.Vector3(i, -size / 2, j), new THREE.Vector3(i, size / 2, j)];
-        const geo2 = new THREE.BufferGeometry().setFromPoints(points2);
-        group.add(new THREE.Line(geo2, lineMaterial));
+        const geo2 = new THREE.BoxGeometry(lineThickness, size, lineThickness);
+        const line2 = new THREE.Mesh(geo2, new THREE.MeshBasicMaterial({ color: 0x000000 }));
+        line2.position.set(i, 0, j);
+        group.add(line2);
     }
 
     // Líneas paralelas al eje Z
     for (let j = -size / 2; j <= size / 2; j += step) {
-        const points3 = [new THREE.Vector3(i, j, -size / 2), new THREE.Vector3(i, j, size / 2)];
-        const geo3 = new THREE.BufferGeometry().setFromPoints(points3);
-        group.add(new THREE.Line(geo3, lineMaterial));
+        const geo3 = new THREE.BoxGeometry(lineThickness, lineThickness, size);
+        const line3 = new THREE.Mesh(geo3, new THREE.MeshBasicMaterial({ color: 0x000000 }));
+        line3.position.set(i, j, 0);
+        group.add(line3);
     }
 }
 
@@ -62,7 +58,7 @@ scene.add(group);
 
 // Asegúrate de que la cámara está mirando al centro de la escena
 group.position.set(0, 0, 0);
-camera.position.set(5, 5, 5);
+camera.position.set(3.5, 3.5, 3.5);
 camera.lookAt(group.position);
 
 function animate() {
