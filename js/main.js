@@ -64,6 +64,7 @@ camera.lookAt(group.position);
 function animate() {
     requestAnimationFrame(animate);
     group.rotation.y += 0.005;
+    group.rotation.z += 0.005;
     renderer.render(scene, camera);
 }
 
