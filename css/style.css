@@ -1,0 +1,13 @@
+body {
+    margin: 0;
+}
+
+#three-container {
+    display: flex;
+    justify-content: center;  /* Centra el canvas horizontalmente */
+    align-items: center;      /* Centra el canvas verticalmente */
+    width: 100%;
+    height: calc(100vh - 80px); /* Ajuste según la barra de navegación */
+    position: relative;
+    overflow: hidden;
+}
